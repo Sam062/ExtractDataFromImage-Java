@@ -12,19 +12,16 @@ public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Extracting Image Data :" );
-        System.out.println();
+        System.out.println( "Extracting Image Data :\n" );
       
-        String inputFilePath="F:/Screenshot4.png";
+        String inputFilePath="F:/Screenshot5.jpg";
         Tesseract tsi=new Tesseract();
         tsi.setDatapath("F:/ExtractDataFromImage-Java/imgExtraction/Tesseract");
         try {
-			
         	String dataFromImage=tsi.doOCR(new File(inputFilePath)).toLowerCase();
         	System.out.println("All Data from Image :");
         	System.out.println(dataFromImage);
         	System.out.println("\n\n\n");
-        	
         	String d=dataFromImage.replaceAll("[!-.:-@{-}a-zA-Z]", "");
         	d=d.trim(); 
         	
@@ -33,14 +30,18 @@ public class App
         	List<String> li=new ArrayList<String>();
         	for (String string : oneMore) {
         		String demo=string.trim();
-        		//System.out.println(string);
 				if(demo.contains("/"))
 					li.add(demo);
 			}
         	
-        	System.out.println();
-        	System.out.println("final List object ");
-        	System.out.println(li);
+        	System.out.println("-----OUTPUT-----");
+        	if(li.isEmpty())
+        		System.out.println("Please input more Clear image !");
+        	else {
+        		System.out.println("final List object ");
+        		System.out.println(li);
+        	}
+        		
         	
         	
         	
@@ -84,7 +85,7 @@ public class App
         	
         	
 		} catch (TesseractException e) {
-			e.printStackTrace();
+			System.out.println("Issues in image format or file");
 		}
     }
 }
