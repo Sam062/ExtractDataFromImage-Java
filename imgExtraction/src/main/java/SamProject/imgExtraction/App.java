@@ -1,10 +1,9 @@
 package SamProject.imgExtraction;
 
 import java.io.File;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
 
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
@@ -16,32 +15,42 @@ public class App
         System.out.println( "Extracting Image Data :" );
         System.out.println();
       
-        String inputFilePath="F:/Screenshot3.png";
+        String inputFilePath="F:/Screenshot4.png";
         Tesseract tsi=new Tesseract();
         tsi.setDatapath("F:/ExtractDataFromImage-Java/imgExtraction/Tesseract");
         try {
 			
         	String dataFromImage=tsi.doOCR(new File(inputFilePath)).toLowerCase();
+        	System.out.println("All Data from Image :");
         	System.out.println(dataFromImage);
-        	System.out.println();
+        	System.out.println("\n\n\n");
         	
-        	System.out.println("ReplaceAll method");
         	String d=dataFromImage.replaceAll("[!-.:-@{-}a-zA-Z]", "");
-        	System.out.println(d);
+        	d=d.trim(); 
         	
-        	d.trim();
+        	String[] oneMore=d.split("[ \n]");
         	
-        	System.out.println("split method");
-        	String[] oneMore=d.split(" ");
-        	
-        	System.out.println("For Each loop");
         	List<String> li=new ArrayList<String>();
         	for (String string : oneMore) {
-        		System.out.println(string);
-				if(string.contains("/"))
-					li.add(string);
+        		String demo=string.trim();
+        		//System.out.println(string);
+				if(demo.contains("/"))
+					li.add(demo);
 			}
+        	
+        	System.out.println();
+        	System.out.println("final List object ");
         	System.out.println(li);
+        	
+        	
+        	
+        	
+//        	System.out.println("Iterator :>>>>");
+//        	ListIterator<String> itr=li.listIterator();
+//        	while(itr.hasNext())
+//        		System.out.println(itr.next());
+        	
+        	
         	
         	
         	
