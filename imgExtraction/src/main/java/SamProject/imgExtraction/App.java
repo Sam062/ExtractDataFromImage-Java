@@ -3,7 +3,7 @@ package SamProject.imgExtraction;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.ListIterator;
 
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
@@ -14,78 +14,56 @@ public class App
     {
         System.out.println( "Extracting Image Data :\n" );
       
-        String inputFilePath="F:/Screenshot5.jpg";
+        String inputFilePath="F:/Screenshot4.png";
         Tesseract tsi=new Tesseract();
         tsi.setDatapath("F:/ExtractDataFromImage-Java/imgExtraction/Tesseract");
         try {
         	String dataFromImage=tsi.doOCR(new File(inputFilePath)).toLowerCase();
-        	System.out.println("All Data from Image :");
-        	System.out.println(dataFromImage);
-        	System.out.println("\n\n\n");
-        	String d=dataFromImage.replaceAll("[!-.:-@{-}a-zA-Z]", "");
-        	d=d.trim(); 
+        	System.out.println("------- Complete Data from Image -------");
+        	//String dataFromImage="01878/21548Hello hay this 01/10/2020 a format 01/10//2220 of date..1245 sjdbhagdca hsbahhs shb c ma hay thisncfnjhj dnjbcjsadbkd 01/10/4800";   
+        	System.out.println(dataFromImage.trim());
+        	System.out.println("----------------------------------------");
         	
-        	String[] oneMore=d.split("[ \n]");
+        	char[] stringToArray=dataFromImage.toCharArray();
+        	StringBuffer numberAndSlashData=new StringBuffer();
+        	for(char c:stringToArray)
+        		if(c>=47 && c<=57)
+        			numberAndSlashData.append(c);
         	
-        	List<String> li=new ArrayList<String>();
-        	for (String string : oneMore) {
-        		String demo=string.trim();
-				if(demo.contains("/"))
-					li.add(demo);
+        //	System.out.println(numberAndSlashData);
+        	System.out.println();
+        			
+        	List<String> datesList=new ArrayList<String>();
+        	for (int i = 0; i < numberAndSlashData.length(); i++) {
+        		if(i<numberAndSlashData.length()-9)
+        			datesList.add(numberAndSlashData.substring(i, i+10));
 			}
+        	//System.out.println(datesList);
         	
-        	System.out.println("-----OUTPUT-----");
-        	if(li.isEmpty())
-        		System.out.println("Please input more Clear image !");
-        	else {
-        		System.out.println("final List object ");
-        		System.out.println(li);
+        	System.out.println("\n----------OUTPUT AS---------------");
+        	ListIterator<String> itr=datesList.listIterator();
+        	List<String> li=new ArrayList<String>();
+        	while(itr.hasNext()) {
+        		String test=itr.next();
+        		char[] c=test.toCharArray();
+        		int count=0;
+        		boolean b=false;
+        		for (int i = 0; i < test.length(); i++) {
+        			if(c[2]=='/' && c[5]=='/')
+        				b=true;
+					if(c[i]=='/')
+						count++;
+				}
+        		if(count==2 && b==true)
+        			li.add(test);
         	}
-        		
-        	
-        	
-        	
-        	
-//        	System.out.println("Iterator :>>>>");
-//        	ListIterator<String> itr=li.listIterator();
-//        	while(itr.hasNext())
-//        		System.out.println(itr.next());
-        	
-        	
-        	
-        	
-        	
-//        	String demo="01878/21548Hello hay this 01/10/1997 a format of date..1245 sjdbhagdca hsbahhs shb c ma hay thisncfnjhj dnjbcjsadbkd 01/10/1548";
-//        	System.out.println(demo);
-//        	
-//        	String myData=demo.replaceAll("[!-.:-@{-}a-zA-Z]", "");
-//        	myData.trim();
-//
-//        	String[] oneMore=myData.split(" ");
-//        	
-//        	List<String> li=new ArrayList<String>();
-//        	for (String string : oneMore) {
-//				if(string.contains("/"))
-//					li.add(string);
-//			}
-//        	System.out.println(li);
-        	
-        	
-        	
-        	//demo=demo.replaceAll("^[0-9]","");
-        	//System.out.println(demo.replaceAll("[0-9/]",""));
-        	
-        	
-//        	char a[]=demo.toCharArray();
-//        	StringBuffer m=new StringBuffer();
-//        	for(char c:a)
-//        		if(c==48||c==49||c==50||c==51|c==52||c==53||c==54||c==55||c==56||c==57||c==47)
-//        			m.append(c);
-//        	System.out.println(m);
-        	
-        	
-		} catch (TesseractException e) {
-			System.out.println("Issues in image format or file");
-		}
+        	if(li.isEmpty())
+        		System.out.println("No Date Patterns Found");
+        	else
+        		System.out.println(li);
+		  } 
+        catch (TesseractException e) {
+		  System.out.println("Issues in image format or file"); 
+		  }
     }
 }
